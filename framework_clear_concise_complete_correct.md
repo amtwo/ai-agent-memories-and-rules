@@ -1,5 +1,8 @@
 # Writing Framework: Clear, Concise, Complete, and Correct
-
+<!-- 
+Originally written by Andy Mallon, assisted by ChatGPT/Codex.
+This agents.md file is free for anyone to use, but was written by me for me.
+-->
 ## Purpose
 
 Use this framework when deciding whether technical writing needs more detail.
