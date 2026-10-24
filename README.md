@@ -1,5 +1,5 @@
 # AI Agent Memories & Rules
-A collection of general rules & memories that I can feed to all my AI Agents
+A collection of general rules &amp; memories that I can feed to all my AI Agents
 
 -----
 
