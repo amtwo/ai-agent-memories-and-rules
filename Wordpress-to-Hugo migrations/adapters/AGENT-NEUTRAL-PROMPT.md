@@ -12,11 +12,11 @@ Use this prompt in a new coding-agent session. Attach or paste the complete `Wor
 >
 > At each milestone, state the evidence and unresolved decisions. Do not call a milestone complete until its exit conditions are met. Verify the exact branch, commit, environment, hostname, runtime, and rendered content after deployments. Keep the owner in control of the final production go/no-go decision.
 
-## Platform notes
+## Loading this package in any agent
 
-- **Codex:** add the folder as task context or point a short `AGENTS.md` entry to this README; load the cleanup skill where supported.
-- **Claude:** provide the folder as project knowledge or install the cleanup skill in the team's supported skill location; keep this playbook available as project context.
-- **Gemini:** attach the folder or its Markdown files as Gem/project instructions; use the entry prompt at the start of each migration.
-- **Grok and other agents:** attach/paste these files as project context and use the entry prompt. The workflow does not depend on a particular connector.
+- If the product supports reusable skills, install the cleanup skill using that product's documented skill mechanism.
+- If it supports project or repository instructions, point a short instruction file to this folder's README and keep the playbook available as project context.
+- If it supports file attachments, attach the folder or its Markdown files and use the entry prompt above.
+- If it supports only a plain chat, paste the entry prompt and provide the playbook, security guide, and cleanup skill as context.
 
-These are loading suggestions, not claims about current product-specific installation features. Check each product's current documentation before installing platform-specific files or extensions.
+Keep the canonical workflow in these Markdown files. Do not create platform-specific copies unless the owner needs them, and verify current product instructions before configuring an integration.
