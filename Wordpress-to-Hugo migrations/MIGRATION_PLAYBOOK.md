@@ -15,6 +15,8 @@ Maintain these artifacts from day one:
 - A migration inventory: WordPress URL, content type, current status, intended Hugo URL, media dependencies, import status, review status, and exceptions. Do not put personal data into a public inventory.
 - A decision log for retired plugins, unavailable content, redirect choices, analytics, comments, newsletters, and other features.
 
+By default, the cleanup scope is every migrated post and page intended to remain on the Hugo site. Build a complete item count from the content inventory. If the owner excludes an item, record that decision and its URL; do not silently skip it.
+
 Do not invent credentials, resource IDs, or access. Verify current Cloudflare, GitHub, Hugo, and hosting-provider instructions from official documentation before relying on version-sensitive details.
 
 ## Milestone 1 — Accounts, delivery pipeline, beta site, and stats foundation
@@ -71,7 +73,7 @@ If no local backup exists:
 3. For self-managed WordPress, assume the owner can administer it. Ask them to create a database and uploads backup using their established process, then provide the resulting local path.
 4. If a full backup cannot be obtained, discuss practical alternatives with the owner: host support export, WordPress export plus media fetch, or a scoped public-site crawl. Explain what each option loses. Get the owner's decision before scraping. Check applicable access terms, crawl limits, robots policy, copyright, and privacy obligations; keep the crawl rate low and identify unavailable content. A scrape is not equivalent to a database-plus-uploads backup.
 
-Never upload the database or private media archive to a third-party AI service. Parse locally where possible. Treat the database, exports, comments, and logs as sensitive. Suppress personal fields and avoid copying private content into chat or PR descriptions.
+Treat the database, exports, comments, and logs as sensitive. Never upload a raw backup or private media archive to an AI service. Before a remote coding agent reads post or page content, explain where processing occurs and get the owner's approval; without approval, keep processing local and share only redacted excerpts or aggregate reports. Suppress personal fields and avoid copying private content into chat or PR descriptions.
 
 ### Inventory, convert, and reconcile
 
@@ -79,7 +81,7 @@ Never upload the database or private media archive to a third-party AI service. 
 2. Establish URL rules before importing. Preserve all valid public URLs unless the owner explicitly approves a change. Generate redirect candidates only from confirmed mappings.
 3. Import from a copy into Hugo content and local media. Preserve titles, dates/time zones, excerpts/descriptions, authors, taxonomies, featured images, WordPress IDs where useful, and canonical routes.
 4. Keep drafts and private posts out of production unless the owner asks to migrate them. Retain future dates; do not change publication dates to make content appear in previews.
-5. Audit plugin behavior: forms, search, comments, short links, redirects, galleries, downloads, newsletters, social embeds, SEO metadata, schema, and event/calendar features. Classify each as migrate, replace, retire, or owner decision.
+5. Audit plugin and theme behavior. For each feature, choose migrate, replace, retire, or owner decision. Preserve approved historical comments when appropriate while excluding spam and unnecessary commenter contact data; choose a separate provider for new comments if needed. Migrate newsletter subscriptions only with the owner's consent and verified subscriber permissions, and never send a test broadcast to real subscribers. Confirm search excludes drafts/future posts, forms have a chosen secure backend, embeds and media remain usable, SEO/canonical metadata is retained, legacy routes and feeds have a continuity plan, and custom post types/events are either migrated or explicitly retired.
 6. Check importer reports and reconcile counts. Flag missing media, unknown shortcodes, unsupported blocks, retired URLs, duplicate routes, and undecided features. Do not silently drop them.
 7. Replace Jetpack stats with a standalone protected stats site only if the owner wants one. Explain the separate app, identity provider, D1 storage, and operating costs/limits before provisioning.
 
@@ -97,7 +99,7 @@ If the owner declines, lacks access, or an endpoint is unavailable, record that 
 
 ## Milestone 3 — Repair, review, and launch readiness
 
-Use [Migration Cleanup and Polish](skills/Migration-Cleanup-and-Polish/SKILL.md). Ask the owner how many posts/pages belong in each batch. Complete its repair pass before its Markdown conversion pass. Keep beta available throughout.
+Use [Migration Cleanup and Polish](skills/Migration-Cleanup-and-Polish/SKILL.md) Pass 1 only: repair broken or mangled output across every in-scope post and page. Ask the owner how many items to include in each batch and record the chosen size for both passes. Finish and verify Pass 1 before starting Milestone 4. Keep beta available throughout.
 
 Review pages in a browser at desktop and narrow sizes, with light and dark themes where available. Verify navigation, images, captions, code, embeds, downloads, search, forms, comments, feeds, canonical URLs, metadata, redirects, accessibility, and performance. Compare rendered behavior with the WordPress source where useful. A successful static build does not prove content equivalence.
 
@@ -111,15 +113,15 @@ Use a living go-live checklist from the first milestone. It should capture:
 
 Never put DNS credentials, private origin passwords, tokens, or full zone exports in Git. Keep a private, access-controlled record with the previous origin and each changed record's name, type, target, TTL, and proxy state. Keep the old WordPress site and backup available until the owner accepts the new site.
 
-**Milestone 3 exit:** the site is visually and functionally reviewed on beta; all known critical breakage is fixed; remaining exceptions have owner decisions; the go-live checklist is complete enough to execute and recover autonomously. The human makes the final production go/no-go decision.
+**Milestone 3 exit:** every in-scope page has completed the repair pass and is verified on beta; the site looks and functions well enough to be ready for cutover; remaining exceptions and recovery steps are recorded. Complete Milestone 4 before the actual cutover when it is part of the project. The human makes the final production go/no-go decision.
 
 ## Milestone 4 — Final HTML and Markdown hygiene
 
-After pages are repaired, run the skill's second pass over every post and page. Convert verbose HTML to Markdown only when Hugo's rendered output preserves meaning, links, attributes that matter, nesting, accessibility, and visual intent. Keep HTML for semantics/attributes Markdown cannot represent reliably, custom components, forms, embeds, and complex figures. Do not combine a repair and a syntax cleanup in one PR.
+After Milestone 3's repairs are merged and verified, run the skill's Pass 2 over every in-scope post and page, using the same human-selected batch size. Convert verbose HTML to Markdown only when Hugo's rendered output preserves meaning, links, attributes that matter, nesting, accessibility, and visual intent. Keep HTML for semantics/attributes Markdown cannot represent reliably, custom components, forms, embeds, and complex figures. Do not combine a repair and a syntax cleanup in one PR.
 
 Complete the final content inventory and route/redirect audit. Run the project's documented lint/build and inspect affected generated output. Update maintenance documentation for each new recurring integration, generated artifact, migration tool, or deploy setting.
 
-**Milestone 4 exit:** every in-scope page has a recorded result for both passes; unresolved exceptions are explicit; all PRs are merged and verified; the full site passes local and CI builds; the owner-approved go-live checklist has current evidence.
+**Milestone 4 exit:** every in-scope page has a recorded result for both passes; unresolved exceptions are explicit; all PRs are merged and verified; the full site passes local and CI builds; the go-live checklist has current evidence. The human makes the final production go/no-go decision.
 
 ## Future-dated content and previews
 
