@@ -42,6 +42,8 @@ The human authenticates in browser/device flows and confirms the correct account
 6. Add only the required `beta.<domain>.<tld>` custom hostname and DNS record. Confirm its DNS target, TLS status, and Pages association. Keep the apex and `www` production routing as-is.
 7. Build and publish a hello-world page on beta. Verify the exact deployment branch, commit SHA, status, hostname, HTTPS certificate, generator marker, homepage, 404, sitemap, and feed. Inspect links and assets in a browser.
 
+Treat beta and branch previews as public unless access protection is verified. Do not publish sensitive or private content there. Use noindex controls where appropriate, but do not treat noindex as access control. If the preview includes confidential material, protect the hostname with an authenticated access policy and test it before import.
+
 A green GitHub build is not proof that Cloudflare deployed the same commit. Record the Pages deployment ID, environment, branch, SHA, URL, and status.
 
 ### Build the stats foundation
