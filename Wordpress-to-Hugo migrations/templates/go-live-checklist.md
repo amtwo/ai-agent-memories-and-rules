@@ -8,6 +8,7 @@ Copy this checklist into the site project early. Keep private DNS/origin evidenc
 - [ ] Confirm latest successful Pages Production deployment uses the intended production branch and exact commit.
 - [ ] Confirm Hugo build command, output directory, and deployed generator/runtime marker.
 - [ ] Confirm beta has been reviewed and key routes work over HTTPS.
+- [ ] Confirm beta/preview exposure is intentional; protect confidential content with authentication and use noindex only as a discovery control.
 - [ ] Verify home, representative posts/pages, search, sitemap, RSS/Atom feeds, images, redirects, 404, comments, forms, and stats authentication where applicable.
 - [ ] Verify canonical URLs, WordPress GUID/feed continuity where applicable, metadata, and indexing behavior.
 - [ ] Inventory all old routes. Test each redirect at beta/preview; resolve every high-value legacy URL.
