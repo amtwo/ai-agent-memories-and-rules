@@ -1,6 +1,6 @@
 # WordPress-to-Hugo migration kit
 
-This folder packages a reusable, agent-neutral workflow for moving a WordPress site to Hugo on Cloudflare. It works as a human-readable runbook on its own and can also be loaded as context by Codex, Claude, Gemini, Grok, or another coding agent.
+This folder packages a reusable, agent-neutral workflow for moving a WordPress site to Hugo on Cloudflare. It works as a human-readable runbook on its own and can also be loaded as context by a coding agent.
 
 ## Start here
 
