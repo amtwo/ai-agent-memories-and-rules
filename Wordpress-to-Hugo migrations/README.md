@@ -14,6 +14,7 @@ This folder packages a reusable, agent-neutral workflow for moving a WordPress s
 ## Package layout
 
 - `MIGRATION_PLAYBOOK.md`: the four milestones, decisions, exit criteria, and operating rules.
+- `FUTURE_DATED_PREVIEWS.md`: filtered PR and local previews that preserve publication dates and keep drafts out of Production.
 - `SECURITY_AND_ACCESS.md`: collaborative credential setup and secret-handling requirements.
 - `skills/Migration-Cleanup-and-Polish/SKILL.md`: reusable two-pass content review with one PR per page or post.
 - `templates/project-profile.md`: private, non-secret project facts and decisions.
