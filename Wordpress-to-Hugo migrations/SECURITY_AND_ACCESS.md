@@ -8,6 +8,8 @@ For GitHub, prefer the owner's browser/device authentication with GitHub CLI or 
 
 For Cloudflare, have the owner sign in directly and create scoped API tokens only when an API integration requires them. Use read-only permissions for inventory and analytics reads. Use narrowly scoped Pages/Workers/D1 write access only for a task that needs it. Use a separate token for automation instead of reusing a personal global token. Prefer the Cloudflare dashboard or supported Wrangler login flow. Verify the selected account before any remote write.
 
+Use separate credentials for agent-operated API calls and Cloudflare automation. Prefer the coding agent's native Cloudflare connection or an owner-authenticated secure integration for the agent; if a scoped token is required, place it in the platform's credential store or a protected process environment that is not exposed in prompts, tool output, or logs. Create a different least-privilege token for CI/Cloudflare automation and store it only in the provider's secret manager. The human should verify both credential names, scopes, owners, and rotation locations without showing either value to the agent.
+
 For WordPress.com/Jetpack, use the provider's official OAuth or API-console browser flow with the minimum read scope needed for stats. Do not ask the owner to paste an application password or bearer token.
 
 For stats authentication, the agent should ask which identity provider the owner wants. Configure it through Cloudflare Access or the chosen platform's supported auth service. Keep the allow-list narrow, and test both permitted and denied identities. Google/Gmail is an optional choice, not a default requirement.
