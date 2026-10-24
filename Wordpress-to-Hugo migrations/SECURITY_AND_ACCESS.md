@@ -32,6 +32,8 @@ The agent may use an already configured credential only through its authorized p
 
 A basic Hugo build usually needs no deployment token when Cloudflare Pages is connected to GitHub through its native integration. Prefer that model: GitHub Actions runs validation; Cloudflare Pages builds PR previews and production from Git events.
 
+If a private-repository preview wrapper reads pull-request metadata (for example, an optional Preview Date field), create a separate fine-grained GitHub token limited to that repository with pull-request read access. Put it in Cloudflare Pages **Preview** secrets only. Do not put it in Production, GitHub Actions output, a command argument, or a source file. The wrapper must not print it and must fail clearly if it is missing or the metadata is invalid. See [the filtered future preview guide](FUTURE_DATED_PREVIEWS.md).
+
 If custom automation is required, have the owner add the credential using GitHub's Actions Secrets UI or the platform's secure secret manager. Reference the secret by name in workflow code. Avoid printing shell environment or enabling verbose traces. Scope a Pages deployment token to the single account/project and the minimum Pages permissions available. Never commit it or paste it into a workflow file.
 
 For a stats Worker, use Wrangler's authenticated login for development and deployment. Put runtime API credentials into Worker secrets using the current documented Wrangler command or Cloudflare dashboard. Keep public configuration (account/site identifiers, hostnames, non-secret names) separate from credentials.
