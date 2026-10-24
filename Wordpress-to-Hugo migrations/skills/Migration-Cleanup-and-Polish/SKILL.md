@@ -10,7 +10,7 @@ Use this after the WordPress import is on a beta/preview site. Read the reposito
 
 1. Establish the content inventory and rendered baseline. Record the commit, Hugo version, local build result, preview hostname, deployment branch/SHA, and pre-existing failures.
 2. Ask the human how many posts/pages they want in each batch. Use that number as the cap for each round in both passes. Do not invent a default. The user may change the batch size later.
-3. Confirm the in-scope posts/pages and the source of truth for each. Preserve URL, title, date, author, taxonomy, WordPress ID, media, attribution, and intended publication status unless the human requests a specific change.
+3. Set the default scope to every imported post and page intended to remain on the Hugo site. Ask the human to identify any exclusions and record each exclusion with its reason; do not silently skip items. Confirm the source of truth for each item. Preserve URL, title, date, author, taxonomy, WordPress ID, media, attribution, and intended publication status unless the human requests a specific change.
 4. Work in an isolated branch/worktree where available. Keep each PR scoped to one page or post.
 
 Do not use issue labels, tags, or an IssueBot queue. Track work in a simple private checklist or PR list.
