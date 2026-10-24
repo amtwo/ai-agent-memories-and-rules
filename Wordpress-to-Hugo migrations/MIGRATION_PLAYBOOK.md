@@ -123,7 +123,9 @@ Complete the final content inventory and route/redirect audit. Run the project's
 
 ## Future-dated content and previews
 
-Preserve each post's intended `date` and draft status. Hugo normally excludes future-dated content from ordinary production builds. For local review, use the project's Hugo version and an explicit future-content preview option such as `hugo server --buildDrafts --buildFuture`; confirm the exact flags with the installed Hugo help. Keep production build commands free of the future-content flag. For a Cloudflare branch preview, confirm whether the current Pages configuration can use a Preview-specific command. If not, use a documented preview-only branch build rule or local preview. Never make a future post appear by changing its date, and verify it remains absent from production until its intended date.
+Use a filtered preview build so opted-in future content can be reviewed without changing its real date or exposing all drafts. The recommended pattern uses one Hugo build wrapper: Production runs ordinary Hugo; pull request validation requests preview mode; non-production Pages branches filter content using Pages branch context. A top-level boolean `preview: true` opts an individual page into review. An optional `Preview Date: YYYY-MM-DD` field in the open PR body simulates the site through a strict date cutoff. The wrapper stages only normally published-by-cutoff content plus explicit opt-ins before using Hugo's draft/future flags. See [the detailed future preview guide](FUTURE_DATED_PREVIEWS.md).
+
+For private GitHub repositories, the Pages Preview build may need a fine-grained, repository-scoped read-only pull-request token to read that field. Store it in the Preview environment only; Production does not need it. Keep public-preview privacy controls in place. Never change a post's publication date to make it appear, and verify the content is absent from Production until intended.
 
 ## General merge, deployment, and recovery rules
 
