@@ -1,6 +1,6 @@
 # Future-dated posts and safe previews
 
-This pattern previews scheduled content without changing its intended date or publishing it early. Adapt it to the site's Hugo version and the current Cloudflare Pages environment variables. The [AM² reference implementation](https://github.com/amtwo/AM2-co/blob/main/scripts/hugo_build.py) shows a wrapper that serves local previews and Cloudflare Pages branch previews from the same rules.
+This pattern previews scheduled content without changing its intended date or publishing it early. Adapt it to the site's Hugo version and the current Cloudflare Pages environment variables. Use one documented build wrapper for local, pull request, branch-preview, and production builds, with explicit rules for each environment.
 
 ## Required behavior
 
@@ -23,7 +23,7 @@ Preview Date: YYYY-MM-DD
 
 The wrapper reads this value only from the open PR associated with the Pages branch. It validates one strict calendar date, then asks Hugo which content is publishable through the cutoff using Hugo's clock setting. The staged content contains only pages published by that cutoff and pages explicitly opted into preview mode. Hugo may then build drafts and future pages from that staged directory without exposing every draft in the repository.
 
-For example, a PR with `Preview Date: 2026-11-01` can show a non-draft post scheduled for November 1 while excluding a post dated November 3 and all unmarked drafts. Leave the field blank for an ordinary preview. Never set this value in production metadata or change the content's real date.
+For example, a PR cutoff can show a non-draft post scheduled on or before the cutoff while excluding later posts and all unmarked drafts. Leave the field blank for an ordinary preview. Never set this value in production metadata or change the content's real date.
 
 ## Cloudflare and GitHub setup
 
