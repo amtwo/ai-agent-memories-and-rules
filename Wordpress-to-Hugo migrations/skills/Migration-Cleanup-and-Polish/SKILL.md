@@ -11,7 +11,7 @@ Use this after the WordPress import is on a beta/preview site. Read the reposito
 1. Establish the content inventory and rendered baseline. Record the commit, Hugo version, local build result, preview hostname, deployment branch/SHA, and pre-existing failures.
 2. Ask the human how many posts/pages they want in each batch. Use that number as the cap for each round in both passes. Do not invent a default. The user may change the batch size later.
 3. Set the default scope to every imported post and page intended to remain on the Hugo site. Ask the human to identify any exclusions and record each exclusion with its reason; do not silently skip items. Confirm the source of truth for each item. Preserve URL, title, date, author, taxonomy, WordPress ID, media, attribution, and intended publication status unless the human requests a specific change.
-4. Work in an isolated branch/worktree where available. Keep each PR scoped to one page or post.
+4. Work in an isolated branch/worktree where available. Default to one page/post per PR; the human may direct a different grouping.
 
 ## Pass 1 — Repair broken or mangled HTML/Markdown
 
@@ -23,7 +23,7 @@ Do not "fix" valid but unusual source based on a regex or style preference. Conf
 
 ### Stage a batch as Draft PRs
 
-Work through pages in the human-selected batch size. For every page, open one Draft PR. This means a batch of 8 pages has up to 8 distinct Draft PRs, each repairing one page/post. Do not combine pages into one PR unless the human instructs otherwise. Do not mark any PR ready while the batch is still being prepared.
+Work through pages in the human-selected review batch size. The batch size is the number of posts/pages (and normally the same number of page-specific PRs) prepared together for human review. For every page, open one Draft PR. A batch of 8 pages therefore normally has 8 distinct Draft PRs, each repairing one page/post. If the human directs a different grouping, follow it while keeping the scope reviewable. Do not mark any PR ready while the batch is still being prepared.
 
 Each PR should say:
 
@@ -37,7 +37,7 @@ If one page has unrelated changes already present, preserve them and coordinate 
 
 ### Adversarial review, readiness, and human review
 
-After all Draft PRs in the batch are staged, review every PR adversarially. Inspect the complete diff and rendered before/after page. Challenge URL/date/metadata drift, accidental content changes, lost links/attributes, inaccessible markup, unclosed markup elsewhere on the page, overbroad edits, and regressions at narrow widths/themes. Resolve findings, rerun build checks, and confirm each PR's exact Preview deployment matches its head SHA.
+The default is to stage the whole batch and then review every PR adversarially. If the human chooses the optional concurrent reviewer workflow and the agent environment supports isolated subagents, request an independent adversarial review as soon as each Draft PR is created. In either workflow, do not mark any PR ready until every PR in the batch has a completed review. Inspect the complete diff and rendered before/after page. Challenge URL/date/metadata drift, accidental content changes, lost links/attributes, inaccessible markup, unclosed markup elsewhere on the page, overbroad edits, and regressions at narrow widths/themes. Resolve findings, rerun build checks, and confirm each PR's exact Preview deployment matches its head SHA.
 
 Only after every PR in the batch has had this review and its Preview is valid, mark the reviewed PRs ready for review. The human reviews and merges them, or explicitly authorizes the agent to merge those PRs. Do not infer merge permission from permission to implement or open PRs.
 
@@ -45,7 +45,7 @@ After merge, verify each page at the deployed hostname and exact production comm
 
 ## Pass 2 — Convert appropriate HTML to Markdown
 
-Begin only after all Pass 1 items in scope have been repaired and verified. Reuse the same human-selected batch size and repeat the same steps: edit each item, one Draft PR per page/post; stage a complete batch; adversarially review every PR; mark valid PRs ready; wait for human review/merge or explicit merge authorization; verify every merged item on the deployed site.
+Begin only after all Pass 1 items in scope have been repaired and verified. Reuse the same human-selected review batch size and PR grouping choice. Repeat the same steps: edit each item, default to one Draft PR per page/post unless the human specifies otherwise; stage a complete batch; adversarially review every PR (or use the optional concurrent reviewer workflow); mark valid PRs ready; wait for human review/merge or explicit merge authorization; verify every merged item on the deployed site.
 
 Convert only syntax that Markdown can represent without losing the rendered meaning. Common candidates include paragraphs, headings, simple ordered/unordered/nested lists, emphasis, links, blockquotes, inline code, and fenced code blocks. Use the repository's actual Markdown parser and extensions when judging equivalence.
 
