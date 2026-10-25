@@ -34,8 +34,6 @@ COLUMNS = [
     "comment_count",
 ]
 UPLOAD_RE = re.compile(r"wp-content/uploads/[^\"'\s<>)]*", re.IGNORECASE)
-ROOT_RE = re.compile(rb"<(?:[A-Za-z_][\w.-]*:)?rss(?:\s|>)", re.IGNORECASE)
-DTD_RE = re.compile(rb"<!\s*(?:DOCTYPE|ENTITY)\b", re.IGNORECASE)
 
 
 def open_export(path: Path):
