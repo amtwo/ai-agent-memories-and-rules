@@ -9,9 +9,12 @@ from __future__ import annotations
 import argparse
 import csv
 import gzip
+import os
 import re
 import sys
+import tempfile
 import xml.etree.ElementTree as ET
+from xml.parsers import expat
 from collections import Counter
 from pathlib import Path
 
@@ -40,21 +43,34 @@ def open_export(path: Path):
     return gzip.open(path, "rb") if path.suffix.lower() == ".gz" else path.open("rb")
 
 
-def reject_dtd(path: Path) -> None:
-    """Reject DTD/entity declarations before the WXR document root."""
-    with open_export(path) as stream:
-        prefix = bytearray()
-        while len(prefix) < 1_048_576:
-            chunk = stream.read(16_384)
-            if not chunk:
-                break
-            prefix.extend(chunk)
-            match = ROOT_RE.search(prefix)
-            if match:
-                if DTD_RE.search(prefix[:match.start()]):
-                    raise ValueError("WXR DTD/entity declarations are not accepted")
-                return
-        raise ValueError("Could not find a WXR rss root element near the start of the export")
+def validate_wxr(path: Path) -> None:
+    """Reject DTDs and verify the XML document has an rss root."""
+    parser = expat.ParserCreate()
+    root_seen = False
+
+    def check_root(name: str, _attrs: dict[str, str]) -> None:
+        nonlocal root_seen
+        if not root_seen:
+            root_seen = True
+            if name.rsplit(":", 1)[-1].lower() != "rss":
+                raise ValueError("The XML document root is not a WXR rss element")
+
+    def reject_doctype(*_args: object) -> None:
+        raise ValueError("WXR DTD/entity declarations are not accepted")
+
+    parser.StartElementHandler = check_root
+    parser.StartDoctypeDeclHandler = reject_doctype
+    parser.EntityDeclHandler = reject_doctype
+    parser.ExternalEntityRefHandler = lambda *_args: 0
+
+    try:
+        with open_export(path) as stream:
+            parser.ParseFile(stream)
+    except expat.ExpatError as exc:
+        raise ValueError("The input is not a well-formed WordPress WXR XML export") from exc
+
+    if not root_seen:
+        raise ValueError("The XML document has no root element")
 
 
 def local_name(tag: str) -> str:
@@ -111,29 +127,48 @@ def main() -> int:
         raise ValueError("Output already exists; choose another path or pass --force")
     output.parent.mkdir(parents=True, exist_ok=True)
 
-    reject_dtd(source)
+    validate_wxr(source)
     totals: Counter[str] = Counter()
     row_count = 0
-    with open_export(source) as stream, output.open("w", newline="", encoding="utf-8-sig") as report:
-        writer = csv.DictWriter(report, fieldnames=COLUMNS, extrasaction="ignore")
-        writer.writeheader()
-        try:
-            for _, element in ET.iterparse(stream, events=("end",)):
-                if local_name(element.tag) != "item":
-                    continue
-                record = item_metadata(element)
-                if record is not None:
-                    writer.writerow(record)
-                    totals[record["content_type"]] += 1
-                    row_count += 1
-                element.clear()
-        except ET.ParseError as exc:
-            output.unlink(missing_ok=True)
-            raise ValueError("The input is not a readable WordPress WXR export") from exc
+    temporary_output: Path | None = None
+    try:
+        with open_export(source) as stream:
+            with tempfile.NamedTemporaryFile(
+                mode="w",
+                newline="",
+                encoding="utf-8-sig",
+                dir=output.parent,
+                prefix=f".{output.name}.",
+                suffix=".tmp",
+                delete=False,
+            ) as report:
+                temporary_output = Path(report.name)
+                writer = csv.DictWriter(report, fieldnames=COLUMNS, extrasaction="ignore")
+                writer.writeheader()
+                for _, element in ET.iterparse(stream, events=("end",)):
+                    if local_name(element.tag) != "item":
+                        continue
+                    record = item_metadata(element)
+                    if record is not None:
+                        writer.writerow(record)
+                        totals[record["content_type"]] += 1
+                        row_count += 1
+                    element.clear()
+    except ET.ParseError as exc:
+        raise ValueError("The input is not a readable WordPress WXR export") from exc
+    except BaseException:
+        if temporary_output is not None:
+            temporary_output.unlink(missing_ok=True)
+        raise
 
     if row_count == 0:
-        output.unlink(missing_ok=True)
+        if temporary_output is not None:
+            temporary_output.unlink(missing_ok=True)
         raise ValueError("No WordPress content records were found in the WXR export")
+
+    if temporary_output is None:
+        raise ValueError("The inventory report could not be created")
+    os.replace(temporary_output, output)
 
     summary = ", ".join(f"{kind}={count}" for kind, count in sorted(totals.items()))
     print(f"Wrote {row_count} metadata rows ({summary}) to {output.name}")
