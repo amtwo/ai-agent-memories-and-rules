@@ -48,7 +48,7 @@ Validate the wrapper's selection rules: opted-in future content appears in Previ
 
 ## Scheduled production publication
 
-A future-dated post does not go live merely because its publication time passes; Hugo must build the site again after that time. Ask the owner whether scheduled posts should publish automatically and what local time and schedule they want. Explain that the schedule triggers a new Production build and deployment.
+A future-dated post does not go live merely because its publication time passes; Hugo must build the site again after that time. Ask the owner whether scheduled posts should publish automatically and what local time they prefer. Recommend one daily build as a starting schedule, while letting the owner choose another cadence that fits their publishing needs and the provider's limits. Explain that the schedule triggers a new Production build and deployment.
 
 Cloudflare Pages Deploy Hooks can trigger a deployment when they receive an HTTP POST, and Cloudflare documents using a scheduled CRON trigger to update a Pages site. The schedule can use an external scheduler or a small scheduled Worker that calls the Pages Deploy Hook. Verify the current supported setup and plan limits before configuring it. Protect the deploy-hook URL as a secret: it can trigger a deployment without additional authentication. Store it in a secret manager, never in source control or logs.
 
