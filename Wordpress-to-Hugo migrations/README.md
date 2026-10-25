@@ -20,7 +20,11 @@ This folder packages a reusable, agent-neutral workflow for moving a WordPress s
 - `SECURITY_AND_ACCESS.md`: collaborative credential setup and secret-handling requirements.
 - `skills/Migration-Cleanup-and-Polish/SKILL.md`: reusable two-pass content review with one PR per page or post by default.
 - `templates/project-profile.md`: private, non-secret project facts and decisions.
+- `templates/content-inventory.csv`: reusable content tracking header; keep filled inventories private because titles and URLs may be unpublished.
+- `templates/decision-log.md`: owner choices and follow-up record.
+- `templates/cleanup-batch-tracker.csv`: per-item pass, PR, review, merge, and verification tracker.
 - `templates/go-live-checklist.md`: cutover, verification, deferred launch tasks, and recovery checklist.
+- `tools/inventory_wxr.py`: optional Python standard-library helper that inventories metadata from a local WXR export without exporting bodies or commenter identities; it is not a backup or importer.
 - `adapters/AGENT-NEUTRAL-PROMPT.md`: onboarding and loading instructions for different AI coding products.
 
 ## Cleanup review workflow options
@@ -31,4 +35,4 @@ The default workflow stages a complete human-selected batch of Draft PRs, then a
 
 The canonical instructions are plain Markdown and do not require a vendor-specific plugin, tool schema, or agent runtime. If a product supports skills, load the cleanup skill and keep the playbook available as project context. If it supports repository instruction files, add only a short pointer to this folder. If neither is available, paste the entry prompt and relevant documents into the session.
 
-Adapters should point to these canonical files instead of copying the entire workflow into multiple platform-specific files. Keep credentials and private WordPress exports out of this public package.
+Adapters should point to these canonical files instead of copying the entire workflow into multiple platform-specific files. Keep credentials, private WordPress exports, and filled inventory/tracker files out of this public package. Use the optional WXR helper only on a local copy; keep its CSV output in private project storage.
