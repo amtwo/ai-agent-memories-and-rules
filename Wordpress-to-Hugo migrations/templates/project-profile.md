@@ -9,6 +9,7 @@ Keep this file private if it contains non-public operational details. Never add 
 - Beta hostname:
 - WordPress platform/provider:
 - Site owner and preferred contact method:
+- Owner's preferred explanation depth / engineering comfort:
 - GitHub account/organization:
 - Hugo repository:
 - Production branch:
@@ -25,12 +26,20 @@ Keep this file private if it contains non-public operational details. Never add 
 - Preview and Production runtime/config verified:
 - DNS recovery record stored at (private locator only):
 
+## Theme and visual direction
+
+- Keep existing theme or redesign:
+- Theme assets inspected in backup:
+- Milestone 2 visual scope:
+- Milestone 3 design decisions:
+
 ## Stats dashboard
 
 - Requested: yes/no/pending
 - Repository/Worker:
 - D1 database:
 - Identity provider:
+- Why authentication is needed / access scope explained:
 - Allow-list owner:
 - Analytics sources:
 - Historical Jetpack import: yes/no/pending
@@ -60,7 +69,7 @@ Keep this file private if it contains non-public operational details. Never add 
 
 ## Batch cleanup
 
-- Human-selected batch size:
+- Human-selected review batch size (page-specific PRs prepared together):
 - Pass 1 items/PRs:
 - Pass 2 items/PRs:
 - Exceptions:
