@@ -60,7 +60,7 @@ Offer the stats app as a separate, optional service. Keep it operationally and l
 4. Keep the Cloudflare analytics collection credential read-only for the required analytics scope. Store it as a Worker secret. Configure the collector schedule and verify logs and D1 rows.
 5. Deploy, test the custom stats hostname, authentication, health endpoint, collector, and D1 query. Export/backup the empty initial D1 before any destructive schema change.
 
-**Milestone 1 exit:** A hello-world Hugo site using the owner's agreed initial visual direction works over HTTPS on beta; PR CI and exact Pages previews work; production DNS remains unchanged. If stats were selected, the protected dashboard, database schema, collector, and access policy work. The go-live checklist has ownership, DNS, recovery, and deployment facts filled in.
+**Milestone 1 exit:** A hello-world Hugo site using the LCARS theme works over HTTPS on beta; PR CI and exact Pages previews work; production DNS remains unchanged. If stats were selected, the protected dashboard, database schema, collector, and access policy work. The go-live checklist has ownership, DNS, recovery, and deployment facts filled in.
 
 ## Milestone 2 — Secure backup, import, and optional Jetpack history
 
