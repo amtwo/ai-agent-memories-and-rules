@@ -13,8 +13,6 @@ Use this after the WordPress import is on a beta/preview site. Read the reposito
 3. Set the default scope to every imported post and page intended to remain on the Hugo site. Ask the human to identify any exclusions and record each exclusion with its reason; do not silently skip items. Confirm the source of truth for each item. Preserve URL, title, date, author, taxonomy, WordPress ID, media, attribution, and intended publication status unless the human requests a specific change.
 4. Work in an isolated branch/worktree where available. Keep each PR scoped to one page or post.
 
-Do not use issue labels, tags, or an IssueBot queue. Track work in a simple private checklist or PR list.
-
 ## Pass 1 — Repair broken or mangled HTML/Markdown
 
 ### Review and edit
@@ -25,7 +23,7 @@ Do not "fix" valid but unusual source based on a regex or style preference. Conf
 
 ### Stage a batch as Draft PRs
 
-Work through pages in the human-selected batch size. For every page, open one Draft PR. This means a batch of 8 pages has up to 8 distinct Draft PRs, each repairing one page/post. Do not combine pages into one PR. Do not mark any PR ready while the batch is still being prepared.
+Work through pages in the human-selected batch size. For every page, open one Draft PR. This means a batch of 8 pages has up to 8 distinct Draft PRs, each repairing one page/post. Do not combine pages into one PR unless the human instructs otherwise. Do not mark any PR ready while the batch is still being prepared.
 
 Each PR should say:
 
