@@ -27,7 +27,7 @@ Fail clearly if the branch cannot be classified or a requested date cannot be va
 ### Preview
 
 1. Preview mode must be explicit for local/CI builds and automatic only for verified non-production Pages branches.
-2. Use Hugo's clock setting and `hugo list published` (or a validated equivalent) to identify content normally publishable by the selected cutoff.
+2. Use Hugo's [clock setting](https://gohugo.io/commands/hugo/) and [`hugo list published`](https://gohugo.io/commands/hugo_list_published/) (or a validated equivalent) to identify content normally publishable by the selected cutoff.
 3. Add only pages with a top-level boolean `preview: true`. Reject quoted strings, nested values, malformed metadata, or ambiguous date fields rather than broadening the selection.
 4. Stage the selected content and required page-bundle assets in a temporary content directory. Preserve paths and ensure symlinks or paths cannot escape the source content directory.
 5. Run Hugo with draft/future flags only against that filtered staging directory.
