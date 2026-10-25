@@ -16,6 +16,7 @@ This folder packages a reusable, agent-neutral workflow for moving a WordPress s
 
 - `MIGRATION_PLAYBOOK.md`: the four milestones, decisions, exit criteria, and operating rules.
 - `FUTURE_DATED_PREVIEWS.md`: filtered PR/local previews and scheduled production builds for future-dated content.
+- `templates/BUILD_WRAPPER_CONTRACT.md`: site-specific build-wrapper behavior and validation contract.
 - `SECURITY_AND_ACCESS.md`: collaborative credential setup and secret-handling requirements.
 - `skills/Migration-Cleanup-and-Polish/SKILL.md`: reusable two-pass content review with one PR per page or post by default.
 - `templates/project-profile.md`: private, non-secret project facts and decisions.
