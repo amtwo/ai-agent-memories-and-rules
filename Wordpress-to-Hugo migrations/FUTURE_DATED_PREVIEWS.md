@@ -30,7 +30,7 @@ For example, a PR cutoff can show a non-draft post scheduled on or before the cu
 1. Configure Pages with one build wrapper command used in both environments. The wrapper itself must use the normal production build on the production branch and preview filtering on non-production branches, based on verified Pages environment variables.
 2. For a private GitHub repository, give the Pages **Preview** environment a fine-grained GitHub token restricted to that repository with read-only access to pull-request metadata. The wrapper needs this only to read the open PR body and its Preview Date. Do not configure that token in Production.
 3. Ensure the GitHub Actions pull-request job invokes the wrapper with preview mode. Keep the ordinary push-to-production job on the normal build path.
-4. Fail closed: a missing token, API error, multiple open PR matches, malformed date, or invalid preview metadata must fail clearly. It must not silently produce misleading content.
+4. Fail closed when PR metadata is needed: a missing required token, API error, multiple open PR matches, malformed date, or invalid preview metadata must fail clearly. It must not silently produce misleading content.
 5. Clean the destination before a build so files from an earlier preview cannot survive after an opt-in or cutoff is removed.
 6. Verify preview hostnames are treated as public unless access protection is active. Noindex can reduce discovery but does not restrict access. Do not include private WordPress content in a public preview.
 
