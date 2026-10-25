@@ -46,6 +46,22 @@ Follow the actual wrapper's help and repository documentation; command order can
 
 Validate the wrapper's selection rules: opted-in future content appears in Preview; non-opted drafts and content later than the cutoff stay absent; removing the opt-in/cutoff removes the output on the next clean build; Production does not expose preview-only content. Check the affected page, home/archive listings, search index, feeds, sitemap, and any generated summaries for consistency.
 
+## Scheduled production publication
+
+A future-dated post does not go live merely because its publication time passes; Hugo must build the site again after that time. Ask the owner whether scheduled posts should publish automatically and what local time and schedule they want. Explain that the schedule triggers a new Production build and deployment.
+
+Cloudflare Pages Deploy Hooks can trigger a deployment when they receive an HTTP POST, and Cloudflare documents using a scheduled CRON trigger to update a Pages site. The schedule can use an external scheduler or a small scheduled Worker that calls the Pages Deploy Hook. Verify the current supported setup and plan limits before configuring it. Protect the deploy-hook URL as a secret: it can trigger a deployment without additional authentication. Store it in a secret manager, never in source control or logs.
+
+The owner chooses the cadence, subject to the provider's current technical and account limits. If the owner requests a cadence more frequent than once every 15 minutes (more than four builds per hour), push back immediately and explain build quotas, overlapping deployments, and cost/operational impact. Do not configure that cadence. After the schedule runs, verify the Production deployment identity and confirm the intended post appears at its canonical URL. The owner can instead choose a manual publication workflow.
+
+This schedule is separate from `Preview Date`: preview simulation must never alter the real content date or production schedule.
+
+See the current [Cloudflare Pages Deploy Hooks documentation](https://developers.cloudflare.com/pages/configuration/deploy-hooks/) and [Pages limits](https://developers.cloudflare.com/pages/platform/limits/). Recheck them during setup because limits and product behavior can change.
+
+## Wrapper template
+
+Use [the build-wrapper contract](templates/BUILD_WRAPPER_CONTRACT.md) as the implementation checklist. It deliberately describes a safe site-specific wrapper rather than promising a universal copy-and-run script: content mounts, front matter formats, page bundles, and project build commands vary. Implement and validate the wrapper against the target repository before connecting it to Production.
+
 ## Implementation outline
 
 A portable wrapper should:
