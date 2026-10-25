@@ -24,6 +24,8 @@ Keep this file private if it contains non-public operational details. Never add 
 - Production routing remains unchanged: yes/no
 - Pages build command/output directory:
 - Preview and Production runtime/config verified:
+- Future-publication rebuild schedule and timezone (if selected):
+- Deploy Hook secret name/private storage locator (never its value):
 - DNS recovery record stored at (private locator only):
 
 ## Theme and visual direction
