@@ -33,7 +33,6 @@ COLUMNS = [
     "upload_reference_count",
     "comment_count",
 ]
-CONTENT_SUFFIXES = {".md", ".markdown", ".html", ".htm", ".txt"}
 UPLOAD_RE = re.compile(r"wp-content/uploads/[^\"'\s<>)]*", re.IGNORECASE)
 ROOT_RE = re.compile(rb"<(?:[A-Za-z_][\w.-]*:)?rss(?:\s|>)", re.IGNORECASE)
 DTD_RE = re.compile(rb"<!\s*(?:DOCTYPE|ENTITY)\b", re.IGNORECASE)
