@@ -12,8 +12,9 @@ Maintain these artifacts from day one:
 
 - A non-secret project profile based on [the template](templates/project-profile.md).
 - A living go-live checklist based on [the template](templates/go-live-checklist.md).
-- A migration inventory: WordPress URL, content type, current status, intended Hugo URL, media dependencies, import status, review status, and exceptions. Do not put personal data into a public inventory.
-- A decision log for retired plugins, unavailable content, redirect choices, analytics, comments, newsletters, and other features.
+- A migration inventory copied from [the CSV template](templates/content-inventory.csv): WordPress URL, content type, current status, intended Hugo URL, media dependencies, import status, review status, and exceptions. Keep the filled file private because it can contain unpublished titles and URLs; do not commit personal data.
+- A decision log copied from [the template](templates/decision-log.md) for retired plugins, unavailable content, redirect choices, analytics, comments, newsletters, and other features.
+- A cleanup batch tracker copied from [the template](templates/cleanup-batch-tracker.csv) to record each pass, PR, owner decision, merge, and verification.
 
 By default, the cleanup scope is every migrated post and page intended to remain on the Hugo site. Build a complete item count from the content inventory. If the owner excludes an item, record that decision and its URL; do not silently skip it.
 
@@ -78,7 +79,7 @@ Treat the database, exports, comments, and logs as sensitive. Never upload a raw
 
 ### Inventory, convert, and reconcile
 
-1. Inventory posts, pages, dates, slugs, statuses, categories, tags, canonical URLs, redirects, featured media, inline media, comments, and plugin/theme features.
+1. Inventory posts, pages, dates, slugs, statuses, categories, tags, canonical URLs, redirects, featured media, inline media, comments, and plugin/theme features. Start with the private CSV template. If the owner has a WordPress eXtended RSS (WXR) `.xml` or `.xml.gz` export, the optional [local metadata helper](tools/inventory_wxr.py) can produce a first-pass inventory: `python tools/inventory_wxr.py /private/path/export.xml.gz /private/path/content-inventory.csv`. It uses Python's standard library, reads the export locally, and omits post bodies, comment text, and author names/emails. Its output still contains potentially sensitive titles, URLs, and media paths: store it outside the repository or in a verified ignored private directory, never commit or upload it. It supports WXR metadata only; it does not inventory a database-plus-uploads backup, verify completeness, fetch media, or import content. Reconcile its rows against the full backup and inspect media separately.
 2. Establish URL rules before importing. Preserve all valid public URLs unless the owner explicitly approves a change. Generate redirect candidates only from confirmed mappings.
 3. Import from a copy into Hugo content and local media. Preserve titles, dates/time zones, excerpts/descriptions, authors, taxonomies, featured images, WordPress IDs where useful, and canonical routes.
 4. Keep drafts and private posts out of production unless the owner asks to migrate them. Retain future dates; do not change publication dates to make content appear in previews.
@@ -102,7 +103,7 @@ If the owner declines, lacks access, or an endpoint is unavailable, record that 
 
 ## Milestone 3 — Repair, review, and launch readiness
 
-Use [Migration Cleanup and Polish](skills/Migration-Cleanup-and-Polish/SKILL.md) Pass 1 only: repair broken or mangled output across every in-scope post and page. Ask the owner how many items to include in each batch and record the chosen size for both passes. Finish and verify Pass 1 before starting Milestone 4. Keep beta available throughout.
+Use [Migration Cleanup and Polish](skills/Migration-Cleanup-and-Polish/SKILL.md) Pass 1 only: repair broken or mangled output across every in-scope post and page. Ask the owner how many items to include in each batch and record the chosen size in the private [project profile](templates/project-profile.md) and [batch tracker](templates/cleanup-batch-tracker.csv) for both passes. Finish and verify Pass 1 before starting Milestone 4. Keep beta available throughout.
 
 Review pages in a browser at desktop and narrow sizes, with light and dark themes where available. If the owner chose a redesign, work with them in this milestone to select and implement the site's visual direction, then review representative templates before continuing through the content repair batches. Verify navigation, images, captions, code, embeds, downloads, search, forms, comments, feeds, canonical URLs, metadata, redirects, accessibility, and performance. Compare rendered behavior with the WordPress source where useful. A successful static build does not prove content equivalence.
 
@@ -121,7 +122,7 @@ Never put DNS credentials, private origin passwords, tokens, or full zone export
 
 ## Milestone 4 — Final HTML and Markdown hygiene
 
-After Milestone 3's repairs are merged and verified, run the skill's Pass 2 over every in-scope post and page, using the same human-selected batch size. The owner may choose to complete this pass before or after production DNS cutover; Markdown cleanup should preserve the user-visible content and behavior. If cutover happens first, continue through the normal PR/preview/deployment path and verify each merged page on Production. Convert verbose HTML to Markdown only when Hugo's rendered output preserves meaning, links, attributes that matter, nesting, accessibility, and visual intent. Keep HTML for semantics/attributes Markdown cannot represent reliably, custom components, forms, embeds, and complex figures. Do not combine a repair and a syntax cleanup in one PR.
+After Milestone 3's repairs are merged and verified, run the skill's Pass 2 over every in-scope post and page, using the same human-selected batch size and recording per-item evidence in the [batch tracker](templates/cleanup-batch-tracker.csv). The owner may choose to complete this pass before or after production DNS cutover; Markdown cleanup should preserve the user-visible content and behavior. If cutover happens first, continue through the normal PR/preview/deployment path and verify each merged page on Production. Convert verbose HTML to Markdown only when Hugo's rendered output preserves meaning, links, attributes that matter, nesting, accessibility, and visual intent. Keep HTML for semantics/attributes Markdown cannot represent reliably, custom components, forms, embeds, and complex figures. Do not combine a repair and a syntax cleanup in one PR.
 
 Complete the final content inventory and route/redirect audit. Run the project's documented lint/build and inspect affected generated output. Update maintenance documentation for each new recurring integration, generated artifact, migration tool, or deploy setting. If Production is not live yet, the owner may now approve the DNS cutover using the go-live checklist; if it is already live, verify each content-only deployment at the production hostname.
 
