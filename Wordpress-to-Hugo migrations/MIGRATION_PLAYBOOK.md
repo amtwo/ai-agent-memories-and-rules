@@ -30,7 +30,8 @@ Agree on:
 - The beta hostname, in the form `beta.<domain>.<tld>`, and confirmation that it is safe to point that hostname to the new site.
 - Whether the stats dashboard is wanted, which Cloudflare account/analytics source it will use, the D1 region or data choices when applicable, and which people need access.
 - The stats login provider. Google sign-in through Cloudflare Access is one option; support another provider if the owner prefers it and current Cloudflare Access supports it.
-- The local OS and preferred setup method for Git, GitHub CLI, Hugo, Node.js/npm, Python, and Wrangler. Install only tools needed by the selected architecture.
+- The local OS, the owner's comfort with Git/command-line tools/hosting, and preferred setup method for Git, a GitHub access method, Hugo, Node.js/npm, Python, and Wrangler when needed. Inspect prerequisites before setup, offer supported installation when possible, and guide the owner through official setup otherwise. Docker is optional and should be installed only if the selected architecture needs it.
+- Whether to preserve the WordPress theme or redesign the site. By default, inspect the theme in the archive and plan to reproduce it. Explain the time/effort difference: faithful reproduction is a higher-effort Milestone 2 task; a redesign gets a modest visual baseline in Milestone 2 and collaborative theme selection/implementation in Milestone 3.
 
 The human authenticates in browser/device flows and confirms the correct account. Never ask the human to paste a password, recovery code, OAuth client secret, PAT, API token, cookie, or private key into chat.
 
@@ -54,11 +55,11 @@ Offer the stats app as a separate, optional service. Keep it operationally and l
 
 1. Create a separate repository or clearly isolated app directory, D1 database, migration history, Worker, and deployment configuration. Keep the D1 identifier and non-secret analytics identifiers in the config; put credentials in Worker secrets.
 2. Build a small dashboard/API and a health endpoint. Apply schema migrations before importing data.
-3. Protect all Worker URLs and custom hostnames with Cloudflare Access. Configure the owner's chosen identity provider and a narrow allow policy. Google/Gmail accounts can be used without assuming Google Workspace. Test an allowed identity and a denied identity.
+3. Explain why the stats dashboard needs authentication: analytics may reveal sensitive traffic and behavior, so the dashboard and API should not be public. Ask the owner to choose an identity provider, offer common options such as Google, and verify current provider documentation and compatibility. Configure Cloudflare Access or the selected provider's supported auth service with a narrow allow policy. Test an allowed identity and a denied identity.
 4. Keep the Cloudflare analytics collection credential read-only for the required analytics scope. Store it as a Worker secret. Configure the collector schedule and verify logs and D1 rows.
 5. Deploy, test the custom stats hostname, authentication, health endpoint, collector, and D1 query. Export/backup the empty initial D1 before any destructive schema change.
 
-**Milestone 1 exit:** A hello-world Hugo site works over HTTPS on beta; PR CI and exact Pages previews work; production DNS remains unchanged. If stats were selected, the protected dashboard, database schema, collector, and access policy work. The go-live checklist has ownership, DNS, recovery, and deployment facts filled in.
+**Milestone 1 exit:** A hello-world Hugo site using the owner's agreed initial visual direction works over HTTPS on beta; PR CI and exact Pages previews work; production DNS remains unchanged. If stats were selected, the protected dashboard, database schema, collector, and access policy work. The go-live checklist has ownership, DNS, recovery, and deployment facts filled in.
 
 ## Milestone 2 — Secure backup, import, and optional Jetpack history
 
@@ -81,9 +82,9 @@ Treat the database, exports, comments, and logs as sensitive. Never upload a raw
 2. Establish URL rules before importing. Preserve all valid public URLs unless the owner explicitly approves a change. Generate redirect candidates only from confirmed mappings.
 3. Import from a copy into Hugo content and local media. Preserve titles, dates/time zones, excerpts/descriptions, authors, taxonomies, featured images, WordPress IDs where useful, and canonical routes.
 4. Keep drafts and private posts out of production unless the owner asks to migrate them. Retain future dates; do not change publication dates to make content appear in previews.
-5. Audit plugin and theme behavior. For each feature, choose migrate, replace, retire, or owner decision. Preserve approved historical comments when appropriate while excluding spam and unnecessary commenter contact data; choose a separate provider for new comments if needed. Migrate newsletter subscriptions only with the owner's consent and verified subscriber permissions, and never send a test broadcast to real subscribers. Confirm search excludes drafts/future posts, forms have a chosen secure backend, embeds and media remain usable, SEO/canonical metadata is retained, legacy routes and feeds have a continuity plan, and custom post types/events are either migrated or explicitly retired.
+5. Audit plugin and theme behavior. For each feature, choose migrate, replace, retire, or owner decision. Select a comments provider early; recommend Giscus by default, or consult current Hugo documentation and provider documentation for alternatives that fit the owner's needs. By default, render historical comments as plain-text records immediately above the active comments embed, preserving useful date/author context while excluding spam and private commenter contact data. Assume direct import into the new comments provider is unavailable unless the owner asks for research; then investigate documented import options and decide with the owner. For newsletters and notifications, recommend RSS as the default. If the owner wants email notifications, use a third-party CRM designed for subscriber data and spam/privacy compliance; do not build a bespoke system that stores email addresses. Migrate existing subscriptions only with owner consent and verified subscriber permissions, and never send a test broadcast to real subscribers. Confirm search excludes drafts/future posts, forms have a chosen secure backend, embeds and media remain usable, SEO/canonical metadata is retained, legacy routes and feeds have a continuity plan, and custom post types/events are either migrated or explicitly retired.
 6. Check importer reports and reconcile counts. Flag missing media, unknown shortcodes, unsupported blocks, retired URLs, duplicate routes, and undecided features. Do not silently drop them.
-7. Replace Jetpack stats with a standalone protected stats site only if the owner wants one. Explain the separate app, identity provider, D1 storage, and operating costs/limits before provisioning.
+7. Replace Jetpack stats with a standalone protected stats site only if the owner wants one. Explain that authentication prevents potentially sensitive analytics from being exposed publicly; discuss the separate app, selected identity provider, D1 storage, and operating costs/limits before provisioning.
 
 ### Optional Jetpack/WordPress stats import
 
@@ -108,20 +109,21 @@ Use a living go-live checklist from the first milestone. It should capture:
 - Exact current and intended production branch, commit, Pages project, build settings, hostnames, and Hugo runtime.
 - Pre-cutover DNS/origin records, proxy/TLS settings, Pages custom-domain setup, owner access, and private recovery record location.
 - Content/route, redirect, feed, sitemap, image, comments, stats, and search verification.
+- Tangible deferred work that could affect launch readiness, with an owner, status, and resolution or explicit acceptance. Track deferrals here throughout all milestones; omit trivial tasks that do not affect launch readiness.
 - A cutover sequence, observation window, rollback decision, and recovery steps to restore the prior site.
 - A post-cutover verification record showing actual DNS, certificate, deployment SHA, served marker, core routes, and changed output.
 
 Never put DNS credentials, private origin passwords, tokens, or full zone exports in Git. Keep a private, access-controlled record with the previous origin and each changed record's name, type, target, TTL, and proxy state. Keep the old WordPress site and backup available until the owner accepts the new site.
 
-**Milestone 3 exit:** every in-scope page has completed the repair pass and is verified on beta; the site looks and functions well enough to be ready for cutover; remaining exceptions and recovery steps are recorded. Complete Milestone 4 before the actual cutover when it is part of the project. The human makes the final production go/no-go decision.
+**Milestone 3 exit:** every in-scope page has completed the repair pass and is verified on beta; the site's content and functionality are ready for production cutover; remaining exceptions and recovery steps are recorded. After this exit, the owner may choose to cut over before or after Milestone 4. The owner makes the final production go/no-go decision.
 
 ## Milestone 4 — Final HTML and Markdown hygiene
 
-After Milestone 3's repairs are merged and verified, run the skill's Pass 2 over every in-scope post and page, using the same human-selected batch size. Convert verbose HTML to Markdown only when Hugo's rendered output preserves meaning, links, attributes that matter, nesting, accessibility, and visual intent. Keep HTML for semantics/attributes Markdown cannot represent reliably, custom components, forms, embeds, and complex figures. Do not combine a repair and a syntax cleanup in one PR.
+After Milestone 3's repairs are merged and verified, run the skill's Pass 2 over every in-scope post and page, using the same human-selected batch size. The owner may choose to complete this pass before or after production DNS cutover; Markdown cleanup should preserve the user-visible content and behavior. If cutover happens first, continue through the normal PR/preview/deployment path and verify each merged page on Production. Convert verbose HTML to Markdown only when Hugo's rendered output preserves meaning, links, attributes that matter, nesting, accessibility, and visual intent. Keep HTML for semantics/attributes Markdown cannot represent reliably, custom components, forms, embeds, and complex figures. Do not combine a repair and a syntax cleanup in one PR.
 
-Complete the final content inventory and route/redirect audit. Run the project's documented lint/build and inspect affected generated output. Update maintenance documentation for each new recurring integration, generated artifact, migration tool, or deploy setting.
+Complete the final content inventory and route/redirect audit. Run the project's documented lint/build and inspect affected generated output. Update maintenance documentation for each new recurring integration, generated artifact, migration tool, or deploy setting. If Production is not live yet, the owner may now approve the DNS cutover using the go-live checklist; if it is already live, verify each content-only deployment at the production hostname.
 
-**Milestone 4 exit:** every in-scope page has a recorded result for both passes; unresolved exceptions are explicit; all PRs are merged and verified; the full site passes local and CI builds; the go-live checklist has current evidence. The human makes the final production go/no-go decision.
+**Milestone 4 exit:** every in-scope page has a recorded result for both passes; unresolved exceptions are explicit; all PRs are merged and verified; the full site passes local and CI builds; the go-live checklist has current evidence. If the owner has not cut over, the site is ready for their final go/no-go decision; if it is live, the owner reviews and accepts the updated site.
 
 ## Future-dated content and previews
 
