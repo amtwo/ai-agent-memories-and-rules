@@ -154,11 +154,11 @@ def main() -> int:
                         totals[record["content_type"]] += 1
                         row_count += 1
                     element.clear()
-    except ET.ParseError as exc:
-        raise ValueError("The input is not a readable WordPress WXR export") from exc
-    except BaseException:
+    except BaseException as exc:
         if temporary_output is not None:
             temporary_output.unlink(missing_ok=True)
+        if isinstance(exc, ET.ParseError):
+            raise ValueError("The input is not a readable WordPress WXR export") from exc
         raise
 
     if row_count == 0:
@@ -168,7 +168,10 @@ def main() -> int:
 
     if temporary_output is None:
         raise ValueError("The inventory report could not be created")
-    os.replace(temporary_output, output)
+    try:
+        os.replace(temporary_output, output)
+    finally:
+        temporary_output.unlink(missing_ok=True)
 
     summary = ", ".join(f"{kind}={count}" for kind, count in sorted(totals.items()))
     print(f"Wrote {row_count} metadata rows ({summary}) to {output.name}")
