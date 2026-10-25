@@ -4,6 +4,7 @@ Copy this checklist into the site project early. Keep private DNS/origin evidenc
 
 ## Before cutover
 
+- [ ] Confirm the existing WordPress site is still serving production and will remain available through the approved cutover/acceptance window.
 - [ ] Confirm owner gave a go/no-go for production cutover.
 - [ ] Confirm latest successful Pages Production deployment uses the intended production branch and exact commit.
 - [ ] Confirm Hugo build command, output directory, and deployed generator/runtime marker.
@@ -16,8 +17,11 @@ Copy this checklist into the site project early. Keep private DNS/origin evidenc
 - [ ] Keep WordPress operational and retain the original backup until acceptance.
 - [ ] Capture current DNS records, origin, TLS, proxy state, redirect/Worker rules, and Pages domain assignments in private storage.
 - [ ] Confirm authorized access to restore the previous site and validate the recovery path.
+- [ ] Resolve or explicitly accept every open deferred item that could affect launch readiness; record its owner and decision.
 
 ## Cutover
+
+The site owner chooses whether DNS cutover happens after Milestone 3 or after Milestone 4. Keep the existing WordPress site available until the new site is accepted. Make the production go/no-go decision with the checklist evidence in hand.
 
 - [ ] Apply only the approved DNS/custom-domain changes.
 - [ ] Keep mail-related DNS records unchanged.
