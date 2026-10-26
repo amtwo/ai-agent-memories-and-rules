@@ -12,6 +12,8 @@ The first native implementation is in [amtwo/am2-co-stats/android](https://githu
 
 Canonical implementation and operations live in [amtwo/am2-co-stats](https://github.com/amtwo/am2-co-stats):
 
+The corresponding native Android/API implementation is under review in [amtwo/am2-co-stats PR #11](https://github.com/amtwo/am2-co-stats/pull/11).
+
 - Worker routes, response types, Cloudflare GraphQL queries, and Pages checks: [src/index.js](https://github.com/amtwo/am2-co-stats/blob/main/src/index.js)
 - D1 schema and historical metric tables: [migrations/](https://github.com/amtwo/am2-co-stats/tree/main/migrations)
 - Android reference client and widget: [android/](https://github.com/amtwo/am2-co-stats/tree/main/android)
