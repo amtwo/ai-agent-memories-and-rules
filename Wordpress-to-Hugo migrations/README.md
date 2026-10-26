@@ -26,6 +26,7 @@ This folder packages a reusable, agent-neutral workflow for moving a WordPress s
 - `templates/go-live-checklist.md`: cutover, verification, deferred launch tasks, and recovery checklist.
 - `tools/inventory_wxr.py`: optional Python standard-library helper that inventories metadata from a local WXR export without exporting bodies or commenter identities; it is not a backup or importer.
 - `adapters/AGENT-NEUTRAL-PROMPT.md`: onboarding and loading instructions for different AI coding products.
+- `AM2_OWNER_HUB_APP_BRIEF.md`: platform-neutral API, access, data semantics, privacy boundaries, and validation context for independent native app agents.
 
 ## Cleanup review workflow options
 
